@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin:0;
+		}
+		ul,li{
+			list-style: none;
+		}
+		body,html{
+			background-color: #333333;
+		}
+		#BarragesContent{
+			height: 600px;
+			background: #333;
+			padding: 24px;
+			position: relative;
+			overflow: hidden;
+		}
+		iframe{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			border: none;
+    		box-sizing: border-box;
+		}
+		.item{
+			display: inline-block;
+			position: absolute;
+			white-space: nowrap;
+			font-size: 18px;
+			font-weight: bold;
+			color: #fff;
+			/*color: #e3e3e3;*/
+			text-shadow: 1px 1px #101010;
+			font-weight: blod;
+		}
+		.item:hover{
+			background: rgba(0, 0, 0, 0.3);
+			-webkit-background-clip: text;
+			padding: 5px 10px;
+			border-radius: 20px;
+			margin-top: -5px;
+			margin-left: -10px;
+			z-index: 999;
+		}
+		.colorText{
+			-webkit-background-clip: text;
+			color: transparent;
+			text-shadow: none;
+		}
+		.times{
+			color: #f0f0f0;
+			font-size: 14px;
+			margin: 6px 0;
+		}
+		.control{
+			display: flex;
+			padding-right: 10px;
+		}
+		.control:hover{
+			background-color: #666;
+			color: white;
+			border-radius: 100px;
+		}
+		.control .bar{
+			flex: 1;
+			height: 2px;
+			background-color: white;
+			border-radius: 8px;
+			position: relative;
+			transform: translateY(6px);
+			margin-top: -4px;
+			cursor: pointer;
+		}
+		.control .bar .up{
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background-color: #d9d9d9;
+			border: 1px solid #333;
+			position: absolute;
+			left: 0;
+			top: -3px;
+			transform: translateX(-5px);
+			cursor: pointer;
+		}
+		.control .bar .up:hover{
+			transform:translateX(-5px) scale(1.5);
+		}
+		.control .bar .line{
+			width: 0;
+			height: 2px;
+			border-radius: 8px;
+			background-color: #29b6f6;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+		.control .bar:hover{
+			height: 4px;
+			margin-top: -5px;
+		}
+		.control .bar:hover .line{
+			height: 4px;
+		}
+		.hover_time{
+			display: none;
+			padding: 3px 10px;
+			border-radius: 5px;
+			background: rgba(0, 0, 0, 0.5);
+			color: white;
+			position: absolute;
+			top: -35px;
+			white-space: nowrap;
+		}
+		.hover_time::after{
+			content: '';
+		    display: inline-block;
+		    width: 0;
+		    height: 0;
+		    border-width: 5px;
+		    border-color:  rgba(0, 0, 0, 0.5) transparent transparent transparent;
+		    border-style: solid;
+		    position: absolute;
+		    bottom: -10px;
+		    left: 50%;
+		    transform: translateX(-50%);
+		}
+		.input_url{
+			display: flex;
+			align-items: center;
+			padding-left: 5%;
+			color: #989898;
+			position: relative;
+		}
+		.input_url input{
+		    width: 70%;
+		    height: 30px;
+		    padding: 0 10px;
+		    margin: 10px 0;
+		    outline: none;    
+		    background: none;
+		    border: none;
+		    color: white;
+		    border-bottom: 1px solid #666666;
+		}
+		.input_url input[type='number']{
+			width: 80px;
+		}
+		.input_url>div:first-child{
+			flex: 1;
+		}
+		.history_selection{
+			position: absolute;
+		    left: 10%;
+		    top: 42px;
+		    width: 67%;
+		    background: white;
+		    z-index: 10;
+			max-height: 200px;
+			overflow-y: scroll;
+		}
+		.history_selection ul{
+			display: none;
+		}
+		.history_selection li{
+			height: 40px;
+			line-height: 40px;
+			padding: 0 10px;
+			cursor: pointer;
+			color: #333;
+		}
+		.history_selection li:hover{
+			background-color:#f0f0f0; 
+		}
+		.StartBtn_container{
+			position: absolute;
+			left: 20px;
+			bottom: 10%;
+		}
+		#StartBtn{
+			display: inline-block;
+			padding: 5px 10px;
+			background-color: #29b6f6;
+			text-align: center;
+			cursor: pointer;
+			border-radius: 5px;
+			color: white;
+			transform: scale(0.8);
+		}
+		.play_btn{
+    		width: auto;
+			height: 30px;
+			position: fixed;
+			left: 0px;
+			bottom: 100px;
+			line-height: 30px;
+			padding: 0 10px 0 20px;
+			text-align: right;
+			border-radius: 0 10px 10px 0;
+			cursor: pointer;
+			border:1px solid #333;
+			font-size: 12px;
+			transform: translateX(-60%);
+			transition:cubic-bezier(0.68, -0.55, 0.27, 1.55) .35s;
+			/*transition: all .35s;*/
+		}
+		._clean{
+			background-color: #9a001e;
+    		color: white;
+    		bottom: 140px;
+		}
+		._onece{
+			background-color: #29B6F6;
+			color:white;
+		}
+		._second{
+			left: 0px;
+			bottom: 60px;
+			background-color: white;
+			color:red;
+		}
+		.play_btn:hover{
+			transform: translateX(-10%);
+		}
+		.play_btn:active{
+			opacity: .5;
+		}
+		.fixed_container{
+			position: fixed;
+			top: -60px;
+			left: 0;
+			width: 100%;
+			background-color: rgba(0,0,0,.4);
+			padding-top: 20px;
+			padding-left:20px;
+			padding-right: 20px;
+			padding-bottom: 20px;
+			box-sizing: border-box;
+			/*transition: all .35s;*/
+			transition: cubic-bezier(0.68, -0.55, 0.27, 1.55) .35s;
+			/*opacity: .3;*/
+		}
+		.fixed_container:hover{
+			top:-8px;
+			/*opacity: 1;*/
+			/*bottom: 0*/
+		}
+		.fixed_left{
+			position: fixed;
+			left: -80px;
+			top: 30%;
+			width: 80px;
+			height: auto;
+			background-color: #f0f0f0;
+			border-radius: 10px;
+			padding: 10px;
+			transition: all .35s;
+		}
+		.fixed_left:hover{
+			left: 0;
+		}
+		.fixed_left input{
+			width: 70%;
+			height: 30px;
+			border-radius: 5px;
+			border:1px solid silver;
+			padding: 0 5px;
+		}
+		.fixed_left button{
+		    width: 65px;
+		    height: 30px;
+		    line-height: 30px;
+		    margin-top: 10px;
+		    background-color: #29b6f6;
+		    color: white;
+		    outline: none;
+		    border: none;
+		    border-radius: 5px;
+		}
+		.fixed_left button:active{
+			background-color: #62c0ea;
+		}
+		.mask_1{
+			display: none;
+			position: fixed;
+			right: 0;
+			top: 13%;
+			width: 140px;
+			height: 350px;
+			background-color: rgba(0,0,0,0.8);
+		}
+		.opacity_operate{
+			opacity: 0.4;
+		}
+		.opacity_operate:hover{
+			opacity: 1
+		}
+		.exchange_url{
+			position: fixed;
+			bottom:0;
+			left:0;
+			width: 100%;
+			height: auto;
+			background: rgba(0,0,0,0.4);
+			font-size: 14px;
+			transform: translateY(100%);
+			transition: all .35s;
+			/*transition: cubic-bezier(0.68, -0.55, 0.27, 1.55) .35s;*/
+		}
+		.exchange_url.show{
+			transform: translateY(5%);
+		}
+		.exchange_url.hide{
+			transform: translateY(100%);
+		}
+		.slide_up_btn{
+			display: inline-block;
+			width: 50px;
+			height: 20px;
+			background-color: #333;
+			position: absolute;
+			right: 48%;
+			top:-20px;
+			opacity: .4;
+			border-radius: 100% 100% 0 0 ;
+			cursor: pointer;
+			transition: all .35s;
+		}
+		.slide_up_btn:hover{
+			opacity: 1;
+		}
+		.slide_up_btn::after{
+			content: '';
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-width: 2px 0 0 2px;
+			border-style: solid;
+			border-color: white;
+			position: absolute;
+			left:50%;
+			top: 50%;
+			margin-left: -6px;
+			transform: rotateZ(45deg);
+		}
+		.slide_up_btn.active::after{
+			opacity: 1;
+			transform: translateY(-7px) rotate(-134deg);
+		}
+		.loaders_container{
+			display: flex;
+			margin: 8px 0 20px 0;
+		}
+		.loaders_container>div:first-child{
+			width: 240px;
+		}
+		.loaders ul{
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.loaders ul li{
+			margin-right: 10px;
+		    padding: 3px 8px;
+		    border-radius: 3px;
+		    text-align: center;
+		    cursor: pointer;
+		    background-color: #000;
+		    color: #aaa;
+		    margin-bottom: 10px;
+
+		}
+		.loaders ul li.active{
+			border:1px solid #29b6f6;
+			background-color: #29b6f6;
+			color:white;
+		}
+		#VideoLoading{
+			width: 100px;
+			height: 100px;
+			/*display: none;*/
+			position: absolute;
+			left: 45%;
+			top: 30%;
+			color: white;
+			font-size: 18px;
+			color: white;
+			padding: 8px;
+    		/*background: white;*/
+		}
+		#VideoLoading span{
+			display: inline-block;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			border-radius: 50%;
+			border-width: 5px;
+			border-style: solid;
+		}
+		#VideoLoading span:nth-child(1){
+			width: 20px;
+			height: 20px;
+			margin-left:-10px;
+			margin-top: -10px;
+			border-color: transparent transparent #FF4444 #FF4444;
+			animation: routing2 1.5s 0s linear infinite;
+		}
+		#VideoLoading span:nth-child(2){
+			width: 30px;
+			height: 30px;
+			margin-left:-15px;
+			margin-top: -15px;
+			opacity: 0.9;
+			border-color: transparent transparent #FFBB33 #FFBB33;
+			animation: routing2 1.5s 0.1s linear infinite;
+		}
+		#VideoLoading span:nth-child(3){
+			width: 40px;
+			height: 40px;
+			margin-left:-20px;
+			margin-top: -20px;
+			opacity: 0.7;
+			border-color: transparent transparent #99CC00 #99CC00;
+			animation: routing2 1.5s 0.2s linear infinite;
+		}
+		#VideoLoading span:nth-child(4){
+			width: 50px;
+			height: 50px;
+			margin-left:-25px;
+			margin-top: -25px;
+			opacity: 0.5;
+			border-color: transparent transparent #33B5E5 #33B5E5;
+			animation: routing2 1.5s .3s linear infinite;
+		}
+		#VideoLoading span:nth-child(5){
+			width: 60px;
+			height: 60px;
+			margin-left:-30px;
+			margin-top: -30px;
+			opacity: 0.3;
+			border-color: transparent transparent #0039fc #0039fc;
+			animation: routing2 1.5s 0.4s linear infinite;
+		}
+		@keyframes routing {
+			0%{transform:rotateZ(0deg)}
+			25%{transform:rotateZ(90deg)}
+			50%{transform: rotateZ(180deg)}
+			75%{transform: rotateZ(270deg)}
+			100%{transform: rotateZ(360deg)}
+		}
+		@keyframes routing2 {
+			0%{transform:rotateZ(0deg)}
+			12.5%{transform:rotateZ(-25deg)}
+			25%{transform: rotateZ(-50deg)}
+			37.5%{transform: rotateZ(-25deg)}
+			50%{transform: rotateZ(0deg)}
+			62.5%{transform: rotateZ(90deg)}
+			75%{transform: rotateZ(180deg)}
+			88.5%{transform: rotateZ(360deg)}
+			100%{transform: rotateZ(360deg)}
+		}
+		.log{
+			background-color: white;
+			width: 300px;
+			height: 40px;
+			padding: 20px;
+			border-radius: 3px;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+	<!-- 视频解析网站：http://tv.hzwdd.cn/?ivk_sa=1025922x -->
+	<div id="BarragesContent">
+		<iframe id="VideoIframe" allowfullscreen>
+		</iframe>
+		<div class="mask_1"></div>
+		<div id="List"></div>
+		<div id="VideoLoading">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+	</div>
+	<div class="fixed_left opacity_operate">
+		<div>上距：<input type="number" id="OffsetTopInput" value="0" placeholder="0"></div>
+		<div>行数：<input type="number" id="LineNum" value="20" placeholder="20"></div>
+		<div>速度：<input type="number" id="Speed" value="3" placeholder="3"></div>
+		<div>透明：<input type="number" id="Opacity" value="0.5" placeholder="0" min="0" max="1" step="0.1"></div>
+		<div><button onclick="setUp()">确定</button></div>
+	</div>
+	<div class="play_btn _clean" id="clearDanmu">关闭</div>
+	<div class="play_btn _onece" id="PlayAndPuase">播放</div>
+	<div class="play_btn _second" id="Screenfull">全屏</div>
+	<div class="fixed_container">
+		<div class="times">进度:<span id="Current">0</span>  总时长：<span id="TotalTime">0</span></div>
+		<div class="control">
+			<div class="bar" id="Bar">
+				<div class="line" id="DurateLine"></div>
+				<div class="up" id="DurateCircle"></div>
+				<span class="hover_time">00:00</span>
+			</div>
+		</div>
+	</div>
+	<div class="exchange_url">
+		<span class="slide_up_btn"></span>
+		<div class="input_url">
+			<div>解析地址：<input id="videoUrl" type="text" placeholder="请输入"></div>
+			<div class="history_selection">
+				<ul id="HistoryUl"></ul>
+			</div>
+		</div>
+		<div class="input_url">
+			<div>弹幕链接：<input id="Url" type="text" placeholder="请输入相关视频链接"></div>
+		</div>
+		<div class="input_url">
+			<div>视频总时长：<input id="TotalInput" type="number" placeholder="请输入视频总时长">&nbsp;&nbsp;(分钟)</div>
+		</div>
+		<div class="input_url">
+			<div class="loaders_container">
+				<div>线路：</div>
+				<div class="loaders">
+					<ul id="loadersUl"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="StartBtn_container"><span id="StartBtn">开始解析</span></div>
+	</div>
+	<!-- <div class="log">
+		日志：
+		<span id="Logs"></span>
+	</div> -->
+<script type="text/javascript">
+	let LOADER = 'https://jx.xmflv.com/?url='
+	let loaders = [
+		'https://jx.xmflv.com/?url=',
+		'https://jx.aidouer.net/?url=', // 可以
+		'https://z1.im1907.top/?jx=', // 可以
+		'https://z2.m1907.top:404/?jx=',
+		'http://www.guandianzhiku.com/v/s/?url=',
+		'https://api.jiexi.la/?url=',
+		'https://jx.m3u8.tv/jiexi/?url=',
+		'https://www.ckplayer.vip/jiexi/?url=',
+		'https://www.pangujiexi.cc/jiexi.php?url='
+	]
+	loaders = loaders.concat([
+		'http://jx.bwcxy.com/?v',
+		'http://jx.wodym.cn/?url',
+		'http://jx.rdhk.net/?v',
+		'http://www.xyyh.xyz/zwjx/?url',
+		'https://jx.fo97.cn/?url',
+		'https://play.fo97.cn/?url',
+		'http://yun.360dy.wang/jx.php?url',
+		'https://www.kpezp.cn/jlexi.php?url',
+		'https://jx.ivito.cn/?url',
+		'http://app.hoptc.cn/dyjx.php?url',
+		'http://www.xiashipin.net/?url'
+	])
+	const HISTORY = []
+	let BarragesContent = document.getElementById('BarragesContent')
+	let List = document.getElementById('List')
+	let Current = document.getElementById('Current')
+	let TotalTime = document.getElementById('TotalTime')
+	let DurateLine = document.getElementById('DurateLine')
+	let DurateCircle = document.getElementById('DurateCircle')
+	let Bar = document.getElementById('Bar')
+	let _barW = ~~window.getComputedStyle(Bar).width.replace('px','')
+	let PlayAndPuase = document.getElementById('PlayAndPuase')
+	let ClearDanmu = document.getElementById('clearDanmu')
+	let FixedContainer = document.getElementsByClassName('fixed_container')[0]
+	let control = document.getElementsByClassName('control')[0]
+	let hoverTime = document.getElementsByClassName('hover_time')[0]
+	let TotalInput = document.getElementById('TotalInput')
+	let videoUrl = document.getElementById('videoUrl')
+	let Url = document.getElementById('Url')
+	let StartBtn = document.getElementById('StartBtn')
+	let OffsetTopInput = document.getElementById('OffsetTopInput')
+	let Speed = document.getElementById('Speed')
+	let Opacity = document.getElementById('Opacity')
+	let LineNum = document.getElementById('LineNum')
+	let Screenfull = document.getElementById('Screenfull')
+	let VideoIframe = document.getElementById('VideoIframe')
+	let Slide_up_btn = document.getElementsByClassName('slide_up_btn')[0]
+	let Exchange_url = document.getElementsByClassName('exchange_url')[0]
+	let loaderDiv = document.getElementsByClassName('loaders')[0]
+	let loadersUl = document.getElementById('loadersUl')
+	let VideoLoading = document.getElementById('VideoLoading')
+	let HistoryUl = document.getElementById('HistoryUl')
+	let Logs = document.getElementById('Logs')
+
+	let NodeGroup = []
+	let colors = ['#df5e5e','#25ce37','#1890ff','#dfbf5e','#dfbf5e','#dfbf5e','#5edfaf']
+	let BarragesContentW = ~~window.getComputedStyle(BarragesContent).width.replace('px','')
+	let videoTimer = null
+	let videoDurate = 0 //单位：秒  => 5分钟时长
+	let currentTime = 0
+	let count = -1 //接口起始
+	let lineNumer = 20  //弹幕行数
+	let animateTime = 5 //滚动时间
+	let barrages = [] // 接口返回的弹幕数据列表
+	let playStatus = false
+	let linkUrl = ''
+	let gudingLeft = 25
+	let danmuOffsetTop = 10
+	let speedV = 3
+	let OpacityNum = 0.5
+	let danmuOffsetLeftArr = []
+	let againRequest = false
+	let isOpenDanmu = true  //弹幕是否开启
+	function initOffset(num){
+		if(!danmuOffsetLeftArr.length){
+			for (let i = num; i > 0; i--) {
+				danmuOffsetLeftArr.push(0)
+			}
+		}
+		if(num > danmuOffsetLeftArr.length){
+			for (let i = (num - danmuOffsetLeftArr.length); i > 0; i--) {
+				danmuOffsetLeftArr.push(0)
+			}
+		}
+		if(num < danmuOffsetLeftArr.length && num >1){
+			danmuOffsetLeftArr = danmuOffsetLeftArr.splice(0,num)
+		}
+
+	}
+	let _html = ''
+	for(var i=0;i<loaders.length;i++){
+		_html += '<li data-url="'+loaders[i]+'">'+loaders[i]+'</li>'
+	}
+	loadersUl.innerHTML = _html
+	initOffset(lineNumer)
+
+	BarragesContent.style.height = (document.documentElement.clientHeight - 50) + 'px'
+	// 执行弹幕运动函数
+	var animate = {
+		animateFrame:function(_node){
+			if(!_node.v) return;
+			this.move(_node)
+			if(Math.abs(_node.distance) <(_node.width + _node.offsetLeft)){
+				_node.timer = requestAnimationFrame(function() {
+					this.animate.animateFrame(_node)
+				})
+			}else{  //滚动到最左侧删除节点
+				cancelAnimationFrame(_node.timer)
+				if(_node.parentNode){
+					_node.parentNode.removeChild(_node)
+					NodeGroup.splice(_node._index,1)
+					if(danmuOffsetLeftArr[_node.lineNum])
+					danmuOffsetLeftArr[_node.lineNum] -= (_node.width + 50)
+				}
+			}
+		},
+		move:function(_node){
+			_node.v = _node.v > 10 ? 10 : _node.v
+			_node.distance -=_node.v //递减
+			_node.style.transform = `translateX(${_node.distance}px)`
+		}
+	}
+	// 工具函数
+	let util = {
+		// 检查隧道情况，返回top值
+		checkLineEnable:function(_node) {
+			// const result = danmuOffsetLeftArr.find(item => {
+			// 	return (item + _node.width) <= BarragesContentW
+			// })
+			return danmuOffsetLeftArr.indexOf(Math.min(...danmuOffsetLeftArr)) || 0
+			// return parseInt(Math.random() * lineNumer) * 20;
+		},
+		formatTime:function(times) {
+			let _H = parseInt(times/60/60),
+				_M = parseInt(times/60),
+				_S = parseInt(times%60),
+				result = '';
+				_M = _M >= 60? _M - 60 : _M
+			result = (_H?_H+'时':'')+_M+'分'+_S+'秒'
+			return result
+		},
+		throttle:function(fn, gapTime,target){
+		  if (gapTime == null || gapTime == undefined) {
+		      gapTime = 1500
+		  }
+		  return function () {
+		      let _nowTime = + new Date()
+		      if (((_nowTime - target.lastTime) > gapTime) || !target.lastTime) {
+		          fn.apply(this, arguments)   //将this和参数传给原函数
+		          target.lastTime = _nowTime
+		      }
+		  }
+		}
+	}
+	// 控件操作
+	let mouseOperate = {
+		startX:0,
+		startDuration:0,
+		moveDiffX:0,
+		leftX:0,
+		isTrag:false,
+		hoverX:0,
+		mouseDown:function(e){
+			mouseOperate.startX = e.pageX
+			let _w = ~~window.getComputedStyle(DurateLine).width.replace('px','')
+			mouseOperate.startDuration = _w/_barW
+			mouseOperate.isTrag = true
+		},
+		mouseMove:function(e){
+			if(mouseOperate.isTrag){
+				paused()
+				mouseOperate.moveDiffX = e.pageX - mouseOperate.startX
+				mouseOperate.leftX = parseFloat(((mouseOperate.startDuration + (mouseOperate.moveDiffX/_barW)) * 100).toFixed(2))
+				DurateLine.style.width = mouseOperate.leftX +'%'
+				DurateCircle.style.left = mouseOperate.leftX +'%'
+				currentTime = (mouseOperate.leftX/100) * videoDurate
+				Current.innerHTML = util.formatTime(parseInt((mouseOperate.leftX/100) * videoDurate))
+			}else{
+				hoverTime.style.display = 'inline-block'
+				mouseOperate.hoverX = e.pageX - gudingLeft
+				hoverTime.style.left = (((mouseOperate.hoverX - 40 + 20) / _barW) * 100) +'%'
+				hoverTime.innerHTML = util.formatTime(parseInt((mouseOperate.hoverX / _barW) * videoDurate))
+			}
+		},
+		mouseUp:function(e){
+			if(mouseOperate.isTrag){
+				List.innerHTML = ''
+				NodeGroup = []
+				barrages = []
+				count = 0
+				danmuOffsetLeftArr = []
+				initOffset(lineNumer)
+				// playVideo()
+				start()
+				mouseOperate.isTrag = false
+			}
+		},
+		// 进度条点击定位
+		mouseClick:function(e){
+			if(!mouseOperate.isTrag){
+				List.innerHTML = ''
+				NodeGroup = []
+				mouseOperate.leftX = parseFloat((((e.pageX - gudingLeft + 5) / _barW) * 100).toFixed(2))
+				DurateLine.style.width = mouseOperate.leftX +'%'
+				DurateCircle.style.left = mouseOperate.leftX +'%'
+				currentTime = (mouseOperate.leftX/100) * videoDurate
+				Current.innerHTML = util.formatTime(parseInt((mouseOperate.leftX/100) * videoDurate))
+				barrages = []
+				count = 0
+				danmuOffsetLeftArr = []
+				initOffset(lineNumer)
+				clearTimeout(videoTimer)
+				videoTimer = null
+				start()
+			}
+		}
+	}
+	// 创建节点
+	function create(_node,_index){
+		let divNode = document.createElement('div')
+		divNode.classList.add("item")
+		divNode.innerHTML = _node.content
+		if(_node.v2_color){
+			divNode.style.backgroundImage = `linear-gradient(to right,rgb(${_node.v2_color.color_left.r},${_node.v2_color.color_left.g},${_node.v2_color.color_left.b}),rgb(${_node.v2_color.color_right.r},${_node.v2_color.color_right.g},${_node.v2_color.color_right.b})`
+			divNode.classList.add("colorText")
+		}
+		// divNode.style.color = colors[parseInt(Math.random()*colors.length)]  //随机颜色
+		List.appendChild(divNode)
+		barrages.splice(_index,1)
+		divNode._index = _index
+		init(divNode)
+	}
+	// 初始化节点速度、距离，隧道
+	function init(_node){
+		_node.width = ~~window.getComputedStyle(_node).width.replace('px','')
+		_node.lineNum = util.checkLineEnable(_node)
+		danmuOffsetLeftArr[_node.lineNum] += (_node.width + 50)
+		_node.style.left = (BarragesContentW + 0) +'px' //固定
+		_node.style.top = ((_node.lineNum * 20) + danmuOffsetTop) +'px'
+		_node.style.opacity = OpacityNum
+		// 初始位置
+		_node.offsetLeft = BarragesContentW
+		_node.distance = danmuOffsetLeftArr[_node.lineNum] //移动距离
+		_node.timer = null
+		// _node.v = 5 - (((BarragesContentW/2)/3) * (1/_node.width)) //5秒完成滚动
+		_node.v = speedV //5秒完成滚动
+		NodeGroup.push(_node)
+		// 鼠标移至弹幕上取消定时器，离开后重启定时器
+		for(let i=0;i<NodeGroup.length;i++){
+			let _node = null
+			NodeGroup[i].addEventListener('mouseenter',function(e){
+				cancelAnimationFrame(e.target.timer)
+				e.target.style.zIndex = 100
+			})
+			NodeGroup[i].addEventListener('mouseout',util.throttle(function(e){  //会多次调用，所以每次先取消一次再启动
+					cancelAnimationFrame(e.target.timer)
+					if(playStatus)
+					animate.animateFrame(e.target)
+			},100,NodeGroup[i]))
+		}
+		animate.animateFrame(_node)
+	}
+	// 获取接口数据
+	function getDanmu(dataCount) {
+		return new Promise((resolve,reject) =>{
+			var xhr = new XMLHttpRequest()
+			xhr.open('get',linkUrl+dataCount+'.json',true)
+			xhr.onload = function(e) {
+				if(this.status == 200){
+					resolve(JSON.parse(this.response))
+				}else{
+					reject('请求失败！')
+				}
+			}
+			xhr.send()
+		})
+
+	}
+	// 视频播放
+	function playVideo() {
+		if(currentTime<=videoDurate){
+		// console.log('弹幕数量',List.querySelectorAll('.item').length)
+		clearTimeout(videoTimer)
+		videoTimer = null
+		videoTimer = setTimeout(async function(){
+				// const videos = document.getElementsByTagName('video')
+				// if(videos.length > 0){
+				// 	console.log(videos)
+				// 	Logs.innerHTML = videos[0].src
+				// }else{
+				// 	Logs.innerHTML = '没找到' + parseInt(Math.random()*100)
+				// }
+				if(barrages && barrages.length){
+					let _len = barrages.filter(item =>{return item.time <(currentTime)*1000}).length
+					// console.log(_len,barrages.length)
+					if(_len == barrages.length){  //当前的弹幕数组内已经没有符合条件的，则情况重新获取
+						barrages = []
+						playVideo()
+					}
+					for (let i = barrages.length - 1; i >= 0; i--) {
+						if((barrages[i].time <= currentTime*1000) && (barrages[i].time >= (currentTime - 10)*1000)){
+							if(playStatus && isOpenDanmu){
+								create(barrages[i],i)
+							}
+						}
+						if(i<=0)
+						playVideo()
+					}
+				}
+				if(!barrages.length){ //弹幕数据展示完了重新请求接口
+					let _json = parseInt(currentTime/60)
+					// console.log(_json)
+					// 进度时间大于上一次&开启状态===请求 _json > count && isOpenDanmu
+					// 因网络错误&播放状态===请求 againRequest && playStatus && isOpenDanmu
+					// 开启状态&&进度时间等于当前===请求 isOpenDanmu && _json == count
+					if( (_json > count || (againRequest && playStatus)) && isOpenDanmu){ //每分钟请求一次接口
+						count = _json
+						await getDanmu(count).then(res =>{
+							barrages = res.data.items
+							againRequest = false
+						}).catch(err =>{
+							console.log(err)
+							againRequest = true
+						})
+					}
+					playVideo()
+				}
+			},500)
+		}else{
+			currentTime = 0
+			return;
+		}
+		currentTime+=0.5
+		Current.innerHTML = util.formatTime(parseInt(currentTime))
+		DurateLine.style.width = ((currentTime/videoDurate) * 100) +'%'
+		DurateCircle.style.left = ((currentTime/videoDurate) * 100) +'%'
+	}
+	// 开始
+	function start() {
+		playStatus = true
+		againRequest = true
+		if(NodeGroup.length){
+
+			for(let i=0;i<NodeGroup.length;i++){
+				animate.animateFrame(NodeGroup[i])
+			}
+		}
+		playVideo()
+	}
+	// 暂停
+	function paused(argument) {
+		playStatus = false
+		clearTimeout(videoTimer)
+		videoTimer = null
+		againRequest = false
+		if(NodeGroup.length){
+			for(let i=0;i<NodeGroup.length;i++){
+				cancelAnimationFrame(NodeGroup[i].timer)
+			}
+		}
+	}
+	// 设置
+	function setUp(){
+		console.log('设置弹幕样式')
+		speedV = Speed.value?parseInt(Speed.value):3
+		danmuOffsetTop = parseInt(OffsetTopInput.value)
+		lineNumer = LineNum.value?parseInt(LineNum.value):20
+		OpacityNum = Opacity.value?parseFloat(Opacity.value):1
+		initOffset(lineNumer)
+	}
+	// 开始解析
+	function StartExplain(){
+		console.log(videoUrl, Url, TotalInput)
+		if(!videoUrl || !TotalInput) return;
+		console.log('开始解析')
+		VideoIframe.setAttribute('src','')
+		VideoLoading.style.display = 'none'
+		setTimeout(function(){
+			VideoLoading.style.display = 'inline-block'
+			let _url = Url.value
+			videoDurate = parseFloat(TotalInput.value) * 60
+			TotalTime.innerHTML = util.formatTime(videoDurate)
+			linkUrl = _url
+			if(localStorage.getItem('historyUrl')){
+				let _his = localStorage.getItem('historyUrl').split(',')
+				_his.push(videoUrl.value)
+				_his = [...new Set(_his)]
+				window.localStorage.setItem('historyUrl',_his)
+			}else{
+				window.localStorage.setItem('historyUrl',[videoUrl.value])
+			}
+			window.localStorage.setItem('url',_url)
+			window.localStorage.setItem('duration',videoDurate)
+			window.localStorage.setItem('videoUrl',videoUrl.value)
+			VideoIframe.setAttribute('src',(LOADER.includes('=')?LOADER:(LOADER+'=')) +videoUrl.value)
+			VideoIframe.onload = function(res){
+				console.log('解析成功',res)
+				VideoLoading.style.display = 'none'
+			}
+		},1000)
+	}
+	// 鼠标事件
+	PlayAndPuase.addEventListener('click',function(e) {
+		if(playStatus){
+			paused()
+			this.innerHTML = '播放'
+		}else{
+			start()
+			this.innerHTML = '暂停'
+		}
+	})
+	DurateCircle.addEventListener('mousedown',mouseOperate.mouseDown)
+	FixedContainer.addEventListener('mousemove',mouseOperate.mouseMove)
+	FixedContainer.addEventListener('mouseup',mouseOperate.mouseUp)
+	Bar.addEventListener('mousemove',mouseOperate.mouseMove)
+	control.addEventListener('mouseleave',function() {hoverTime.style.display = 'none'})
+	Bar.addEventListener('click',mouseOperate.mouseClick)
+	StartBtn.addEventListener('click',function() {
+		StartExplain()
+	})
+	Screenfull.addEventListener('click',function(){
+		BarragesContent.requestFullscreen();
+	})
+
+	if(window.localStorage.getItem('url')){
+		let _duration = window.localStorage.getItem('duration'),
+			_url = window.localStorage.getItem('url');
+		Url.value = _url
+		videoUrl.value = window.localStorage.getItem('videoUrl');
+		TotalInput.value = _duration / 60
+		videoDurate = _duration
+		TotalTime.innerHTML = util.formatTime(videoDurate)
+		linkUrl = _url
+	}
+	if(window.localStorage.getItem('LOADER')){
+		let _loader = window.localStorage.getItem('LOADER')
+		const lis = loadersUl.querySelectorAll('li')
+		lis.length && lis.forEach(item => {
+			if(item.dataset.url === _loader){
+				item.setAttribute('class','active')
+			}
+		})
+		LOADER = _loader
+	}
+	if(window.localStorage.getItem('historyUrl')){
+		const his = window.localStorage.getItem('historyUrl').split(',')
+		let lis = ''
+		his.length && his.forEach(item => {
+			lis += `<li>${item}</li>`
+		})
+		HistoryUl.innerHTML = lis
+	}
+
+	window.addEventListener("resize", event => {
+	  	console.log("页面尺寸变化")
+	BarragesContentW = ~~window.getComputedStyle(BarragesContent).width.replace('px','')
+	BarragesContent.style.height = (document.documentElement.clientHeight - 50) + 'px'
+	}, false);
+	window.addEventListener("pagehide", event => {
+	  if (event.persisted) {
+	  	console.log("页面隐藏")
+	  }
+	}, false);
+	window.addEventListener('pageshow',function(){
+	  	console.log("页面显示")
+	  	againRequest = true
+		barrages = []
+		if(playStatus){
+			clearTimeout(videoTimer)
+			playVideo()
+		}
+	})
+	Slide_up_btn.addEventListener('mouseover',function(){
+		const _class = Slide_up_btn.getAttribute('class')
+		if(_class.includes('active')){
+			Slide_up_btn.setAttribute('class','slide_up_btn')
+			Exchange_url.setAttribute('class','exchange_url hide')
+		} else {
+			Slide_up_btn.setAttribute('class','slide_up_btn active')
+			Exchange_url.setAttribute('class','exchange_url show')
+		}
+	})
+	// 线路选择
+	loadersUl.addEventListener('click',function(e){
+		LOADER = e.target.dataset.url
+		const lis = loadersUl.querySelectorAll('li')
+		lis.length && lis.forEach(item =>{
+			item.setAttribute('class','')
+		})
+		e.target.setAttribute('class','active')
+		window.localStorage.setItem('LOADER',LOADER)
+		StartExplain()
+		Slide_up_btn.setAttribute('class','slide_up_btn')
+		Exchange_url.setAttribute('class','exchange_url hide')
+	})
+	videoUrl.addEventListener('focus',function(e){
+		HistoryUl.style.display = 'block'
+	})
+	videoUrl.addEventListener('blur',function(e){
+		setTimeout(() =>{
+			HistoryUl.style.display = 'none'
+		},350)
+	})
+	HistoryUl.addEventListener('click',function(e){
+		videoUrl.value = e.target.innerText
+		StartExplain()
+	})
+	// 关闭弹幕
+	ClearDanmu.addEventListener('click',function(){
+		List.innerHTML = ''
+		NodeGroup = []
+		barrages = [] 
+		isOpenDanmu = !isOpenDanmu
+		againRequest = true
+		if(isOpenDanmu) initOffset(lineNumer)
+		if(!isOpenDanmu) danmuOffsetLeftArr = []
+		this.innerHTML = isOpenDanmu?'关闭':'开启'
+	})
+</script>
+</body>
+</html>
